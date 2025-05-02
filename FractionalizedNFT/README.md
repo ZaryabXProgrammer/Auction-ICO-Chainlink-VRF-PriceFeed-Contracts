@@ -1,65 +1,80 @@
-🧩 FractionalizedNFT Smart Contract
-This smart contract enables fractional ownership of an ERC721 NFT by converting it into ERC20 tokens, allowing multiple parties to own shares of a single NFT. Once the NFT is sold, token holders can redeem their share of the sale proceeds.
+# 🧩 **FractionalizedNFT Smart Contract**
 
-🚀 Features
-Fractionalization: Converts a single NFT into divisible ERC20 tokens.
+> A smart contract for fractional ownership of NFTs using ERC20 tokens.
 
-ERC20 Standard: Allows tokens to be transferred, traded, or held like any fungible token.
+---
 
-NFT Sale: The owner can list the NFT for sale at a specified price.
+## 🚀 **Features**
 
-Proceeds Redemption: After the NFT is sold, token holders can redeem their tokens for a proportional share of the ETH received.
+- **Fractionalizes** an ERC721 NFT into ERC20 tokens.
+- Fully **ERC20-compliant** for transferability and liquidity.
+- Owner can **list the NFT for sale**.
+- Token holders can **redeem ETH** proportionally after NFT is sold.
 
-📦 Technologies Used
-Solidity ^0.8.28
+---
 
-OpenZeppelin Contracts (ERC20, ERC721, Permit, Ownable, ERC721Holder)
+## 📦 **Tech Stack**
 
-📄 Contract Functions
-initialize(address _collection, uint256 _tokenId, uint256 _amount)
-Initializes the contract with the NFT and mints ERC20 tokens.
+- `Solidity ^0.8.28`
+- `OpenZeppelin Contracts`
+  - `ERC20`
+  - `ERC20Permit`
+  - `ERC721`
+  - `Ownable`
+  - `ERC721Holder`
 
-Only callable once by the contract owner.
+---
 
-Transfers the specified NFT to the contract.
+## 📄 **Function Overview**
 
-putForSale(uint256 price)
-Owner lists the NFT for sale at the given price.
+### `initialize(address _collection, uint256 _tokenId, uint256 _amount)`
+- Initializes the contract with an NFT and mints ERC20 tokens.
+- Transfers NFT from caller to contract.
+- **Only callable by owner.**
 
-purchase() payable
-Allows a buyer to purchase the NFT by sending ETH.
+### `putForSale(uint256 price)`
+- Lists the NFT for sale at a given price (in Wei).
+- **Only callable by owner.**
 
-Transfers the NFT to the buyer.
+### `purchase() payable`
+- Transfers NFT to buyer if enough ETH is sent.
+- Enables redemption for token holders.
 
-Enables redemption of proceeds by token holders.
+### `redeem(uint256 _amount)`
+- Burns user's tokens.
+- Sends proportional ETH share based on total token supply.
 
-redeem(uint256 _amount)
-Token holders can redeem their tokens for a proportional share of the ETH collected from the NFT sale.
+---
 
-Tokens are burned upon redemption.
+## 🔐 **Access Control**
 
-🔐 Access Control
-Only the owner can initialize and list the NFT for sale.
+- `initialize()` and `putForSale()` are **restricted to owner**.
+- `purchase()` and `redeem()` are **public** and available post-sale.
 
-Anyone can purchase or redeem according to function requirements.
+---
 
-📌 Notes
-NFT must be approved for transfer before calling initialize.
+## 🧪 **Example Workflow**
 
-Redemptions are only available after the NFT has been sold.
+1. 🛠 Owner calls `initialize()` to lock NFT and mint ERC20 tokens.
+2. 🔁 Tokens can be transferred between users.
+3. 💸 Owner lists NFT with `putForSale(10 ether)`.
+4. 🧍 Buyer calls `purchase()` sending 10 ETH.
+5. 🪙 Token holders call `redeem()` to claim ETH proportional to their token holdings.
 
-The total ETH is divided among token holders proportionally to their holdings.
+---
 
-🧪 Example Use Case
-Owner calls initialize() to fractionalize an NFT into 1000 tokens.
+## ⚠️ **Notes**
 
-Users trade tokens freely as ERC20.
+- NFT must be `approved` before calling `initialize()`.
+- Redemption is only possible **after NFT is sold**.
+- ETH is distributed based on `(_amount / totalSupply) * totalBalance`.
 
-Owner lists the NFT for 10 ETH via putForSale().
+---
 
-Buyer purchases the NFT with purchase().
+## 📃 **License**
 
-Token holders call redeem() to claim their share of 10 ETH based on the number of tokens they hold.
+`MIT License`
 
-📃 License
-This project is licensed under the MIT License.
+---
+
+🖤 Optimized for dark mode readability.
